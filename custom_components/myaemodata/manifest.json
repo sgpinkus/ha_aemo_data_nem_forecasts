@@ -1,0 +1,12 @@
+{
+  "domain": "myaemodata",
+  "name": "My AEMO Data",
+  "codeowners": [
+    "@sgpinkus"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/sginkus/myaemodata",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/sginkus/myaemodata/issues",
+  "version": "0.1.0"
+}
