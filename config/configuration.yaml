@@ -7,6 +7,57 @@ homeassistant:
 
 # https://www.home-assistant.io/integrations/logger/
 logger:
-  default: info
+  default: debug
   logs:
     custom_components.integration_blueprint: debug
+
+resources:
+  - url: /hacsfiles/apexcharts-card/apexcharts-card.js
+    type: module
+
+
+rest: # https://www.home-assistant.io/integrations/rest/
+  - resource: https://visualisations.aemo.com.au/aemo/apps/api/report/5MIN
+    method: POST
+    payload: '{"timeScale": ["30MIN"]}'
+    headers:
+      Referer: "https://visualisations.aemo.com.au/aemo/apps/visualisation/index.html"
+      Content-Type: "application/json"
+      Host: "visualisations.aemo.com.au"
+      User-Agent: "Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0"
+    scan_interval: 300
+    sensor:
+      - name: aemo_5min_raw
+        value_template: >
+          {% set data = value_json['5MIN'] %}
+          {% if data %}
+            {{ (data | map(attribute='SETTLEMENTDATE') | max) }}
+          {% else %}
+            unknown
+          {% endif %}
+        json_attributes:
+          - 5MIN
+template:
+  - sensor:
+      - name: aemo_rrp_series
+        state: "{{ states('sensor.aemo_5min_raw') }}"
+        attributes:
+          series: >
+            {% set data = state_attr('sensor.aemo_5min_raw', '5MIN') %}
+            {% if not data %}
+              {}
+            {% else %}
+              {% set ns = namespace(result={}) %}
+              {% for row in data %}
+                {% set key = row.PERIODTYPE ~ '_' ~ row.REGIONID %}
+                {% set ts = (as_timestamp(row.SETTLEMENTDATE) * 1000) | int %}
+                {% set value = row.RRP %}
+                {% if key not in ns.result %}
+                  {% set ns.result = ns.result | combine({ key: [] }) %}
+                {% endif %}
+                {% set ns.result = ns.result | combine({
+                  key: ns.result[key] + [[ts, value]]
+                }) %}
+              {% endfor %}
+              {{ ns.result }}
+            {% endif %}

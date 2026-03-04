@@ -1,5 +1,5 @@
 {
-    "name": "Integration blueprint",
-    "homeassistant": "2025.2.4",
+    "name": "AEMO Data",
+    "homeassistant": "2026.2.3",
     "hacs": "2.0.5"
 }
