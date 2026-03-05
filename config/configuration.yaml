@@ -3,13 +3,13 @@ default_config:
 
 # https://www.home-assistant.io/integrations/homeassistant/
 homeassistant:
-  debug: true
+  debug: false
 
 # https://www.home-assistant.io/integrations/logger/
 logger:
-  default: debug
+  default: info
   logs:
-    custom_components.integration_blueprint: debug
+    custom_components.aemo_data_nem_forecasts: debug
 
 resources:
   - url: /hacsfiles/apexcharts-card/apexcharts-card.js
