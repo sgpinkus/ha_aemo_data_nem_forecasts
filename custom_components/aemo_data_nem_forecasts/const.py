@@ -4,7 +4,7 @@ from homeassistant.const import (
     CURRENCY_DOLLAR,
     UnitOfEnergy,
 )
-from homeassistant.components.sensor import SensorDeviceClass
+from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
 
 MetricNameType = Literal["RRP", "TOTALDEMAND", "NETINTERCHANGE", "SCHEDULEDGENERATION", "SEMISCHEDULEDGENERATION", "APCFLAG"]
 
@@ -15,31 +15,37 @@ METRICS: dict[MetricNameType, dict[str, Any]] = {
     "RRP": {
         "unit": f"{CURRENCY_DOLLAR}/{UnitOfEnergy.MEGA_WATT_HOUR}",
         "device_class": SensorDeviceClass.MONETARY,
+        "state_class": None,
         "display_precision": 2,
     },
     "TOTALDEMAND": {
         "unit": UnitOfEnergy.MEGA_WATT_HOUR,
         "device_class": SensorDeviceClass.POWER,
+        "state_class": SensorStateClass.MEASUREMENT,
         "display_precision": 3,
     },
     "NETINTERCHANGE": {
         "unit": UnitOfEnergy.MEGA_WATT_HOUR,
         "device_class": SensorDeviceClass.POWER,
+        "state_class": SensorStateClass.MEASUREMENT,
         "display_precision": 3,
     },
     "SCHEDULEDGENERATION": {
         "unit": UnitOfEnergy.MEGA_WATT_HOUR,
         "device_class": SensorDeviceClass.POWER,
+        "state_class": SensorStateClass.MEASUREMENT,
         "display_precision": 3,
     },
     "SEMISCHEDULEDGENERATION": {
         "unit": UnitOfEnergy.MEGA_WATT_HOUR,
         "device_class": SensorDeviceClass.POWER,
+        "state_class": SensorStateClass.MEASUREMENT,
         "display_precision": 3,
     },
     "APCFLAG": {
         "unit": None,
         "device_class": None,
+        "state_class": SensorStateClass.MEASUREMENT,
         "display_precision": 0,
     },
 }

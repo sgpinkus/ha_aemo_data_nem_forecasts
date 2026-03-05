@@ -29,9 +29,9 @@ class RegionSensor(CoordinatorEntity, SensorEntity):
         self._metric: str = metric
         self._attr_unique_id = f"{period}_{metric}_{region}".lower()
         self._attr_name = f"{period} {metric} {region}".upper()
-        self._attr_state_class = SensorStateClass.MEASUREMENT
         self._attr_native_unit_of_measurement = METRICS[self._metric]["unit"]
         self._attr_suggested_display_precision = METRICS[self._metric]["display_precision"]
+        self._attr_state_class = METRICS[self._metric]["state_class"]
         self._attr_device_class = METRICS[self._metric]["device_class"]
         self._attr_icon = "mdi:chart-line"
         self._attr_device_info = DeviceInfo(
