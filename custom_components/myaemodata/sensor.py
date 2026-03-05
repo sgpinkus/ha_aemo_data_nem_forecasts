@@ -32,11 +32,11 @@ class RegionSensor(CoordinatorEntity, SensorEntity):
     def _rows(self):
         return (
             [
-                r
+                r[self._metric]
                 for r in self.coordinator.data["5MIN"]
                 if r["REGION"] == self._region and r["PERIODTYPE"] == self._period
             ]
-            if self.coordinator.data[self._metric]
+            if self.coordinator.data["5MIN"]
             else None
         )
 
