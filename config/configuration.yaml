@@ -37,27 +37,60 @@ rest: # https://www.home-assistant.io/integrations/rest/
           {% endif %}
         json_attributes:
           - 5MIN
+
 template:
   - sensor:
-      - name: aemo_rrp_series
+      - name: aemo_metric_series
         state: "{{ states('sensor.aemo_5min_raw') }}"
         attributes:
           series: >
+            {% set metrics = [
+              "RRP",
+              "TOTALDEMAND",
+              "NETINTERCHANGE",
+              "SCHEDULEDGENERATION",
+              "SEMISCHEDULEDGENERATION",
+              "APCFLAG"
+            ] %}
+
             {% set data = state_attr('sensor.aemo_5min_raw', '5MIN') %}
             {% if not data %}
               {}
             {% else %}
               {% set ns = namespace(result={}) %}
+
               {% for row in data %}
-                {% set key = row.PERIODTYPE ~ '_' ~ row.REGIONID %}
+                {% set base_key = row.PERIODTYPE ~ '_' ~ row.REGIONID %}
                 {% set ts = (as_timestamp(row.SETTLEMENTDATE) * 1000) | int %}
-                {% set value = row.RRP %}
-                {% if key not in ns.result %}
-                  {% set ns.result = ns.result | combine({ key: [] }) %}
-                {% endif %}
-                {% set ns.result = ns.result | combine({
-                  key: ns.result[key] + [[ts, value]]
-                }) %}
+
+                {% for metric in metrics %}
+                  {% if row[metric] is defined %}
+                    {% set key = base_key ~ '_' ~ metric %}
+
+                    {% if key not in ns.result %}
+                      {% set ns.result = ns.result | combine({ key: [] }) %}
+                    {% endif %}
+
+                    {% set ns.result = ns.result | combine({
+                      key: ns.result[key] + [[ts, row[metric]]]
+                    }) %}
+                  {% endif %}
+                {% endfor %}
               {% endfor %}
+
               {{ ns.result }}
             {% endif %}
+type: custom:apexcharts-card
+header:
+  show: true
+  title: NSW1 RRP
+graph_span: 24h
+span:
+  start: day
+series:
+  - entity: sensor.aemo_metric_series
+    name: NSW1 RRP
+    type: line
+    data_generator: |
+      const series = entity.attributes.series["ACTUAL_NSW1_RRP"];
+      return series ? series.map(([x, y]) => [x, y]) : [];

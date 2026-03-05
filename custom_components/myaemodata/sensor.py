@@ -3,7 +3,7 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from .const import METRICS, DOMAIN, REGIONS, PERIODS
+from .const import METRICS, REGIONS, PERIODS
 
 
 async def async_setup_entry(
@@ -11,19 +11,21 @@ async def async_setup_entry(
 ):
     coordinator = entry.runtime_data
     entities = []
-    for region in REGIONS:
-        for period in PERIODS:
-            entities.append(RegionSensor(coordinator, region, period))
+    for period in PERIODS:
+        for metric in METRICS:
+            for region in REGIONS:
+                entities.append(RegionSensor(coordinator, period, metric, region))
     async_add_entities(entities)
 
 
 class RegionSensor(CoordinatorEntity, SensorEntity):
-    def __init__(self, coordinator, region, periodtype):
+    def __init__(self, coordinator, period, metric, region):
         super().__init__(coordinator)
-        self._region = region
-        self._periodtype = periodtype
-        self._attr_unique_id = f"{region.lower()}_{periodtype.lower()}"
-        self._attr_name = f"{region} {periodtype.title()}"
+        self._region: str = region
+        self._period: str = period
+        self._metric: str = metric
+        self._attr_unique_id = f"{period}_{metric}_{region}".lower()
+        self._attr_name = f"{period} {metric} {region}".upper()
         self._attr_native_unit_of_measurement = "$/MWh"
         self._attr_icon = "mdi:chart-line"
 
@@ -32,9 +34,9 @@ class RegionSensor(CoordinatorEntity, SensorEntity):
             [
                 r
                 for r in self.coordinator.data["5MIN"]
-                if r["REGION"] == self._region and r["PERIODTYPE"] == self._periodtype
+                if r["REGION"] == self._region and r["PERIODTYPE"] == self._period
             ]
-            if self.coordinator.data
+            if self.coordinator.data[self._metric]
             else None
         )
 
@@ -42,18 +44,11 @@ class RegionSensor(CoordinatorEntity, SensorEntity):
     def _handle_coordinator_update(self) -> None:
         rows = self._rows()
         if rows:
-            self._attr_native_value = rows[-1 if self._periodtype == "ACTUAL" else 0]["RRP"]
+            self._attr_native_value = rows[-1 if self._period == "ACTUAL" else 0]["RRP"]
             self._attr_extra_state_attributes = {
-                "series": RegionSensor.build_series(rows)
+                "series": [[r["SETTLEMENTDATE"], r[self._metric]] for r in rows]
             }
         else:
             self._attr_native_value = None
             self._attr_extra_state_attributes = {}
         self.async_write_ha_state()
-
-    @classmethod
-    def build_series(cls, rows):
-        result = {}
-        for metric in METRICS:
-            result[metric] = [[r["SETTLEMENTDATE"], r[metric]] for r in rows]
-        return result
