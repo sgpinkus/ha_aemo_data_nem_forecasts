@@ -1,0 +1,14 @@
+{
+  "domain": "aemo_data_nem_forecasts",
+  "name": "AEMO Data NEM Forecasts",
+  "codeowners": [
+    "@sgpinkus"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/sginkus/aemo_data_nem_forecasts",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/sginkus/aemo_data_nem_forecasts/issues",
+  "version": "0.1.0",
+  "single_config_entry": true,
+  "icon": "mdi:chart-multiple"
+}

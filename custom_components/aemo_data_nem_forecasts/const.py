@@ -1,5 +1,3 @@
-"""Constants for myaemodata."""
-
 from typing import Any, Literal
 from logging import Logger, getLogger
 from homeassistant.const import (
@@ -11,7 +9,7 @@ from homeassistant.components.sensor import SensorDeviceClass
 MetricNameType = Literal["RRP", "TOTALDEMAND", "NETINTERCHANGE", "SCHEDULEDGENERATION", "SEMISCHEDULEDGENERATION", "APCFLAG"]
 
 LOGGER: Logger = getLogger(__package__)
-DOMAIN = "myaemodata"
+DOMAIN = "aemo_data_nem_forecasts"
 ATTRIBUTION = "Data provided by http://jsonplaceholder.typicode.com/"
 METRICS: dict[MetricNameType, dict[str, Any]] = {
     "RRP": {

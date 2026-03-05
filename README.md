@@ -1,46 +1,42 @@
-# Notice
+# AEMO_DATA_NEM_FORECASTS
+Simple integration that takes data from a public AEMO NEM API endpoint and exposes it as many `SensorEntity` instances.
+We only expose data from a single API endpoint the give 30m interval forecasts for all NEM regions - more end points might be added later.
+One sensor is created for each of REGION x ("ACTUAL" | "FORECAST") x METRIC giving 5x2x6=60 possible entities grouped into device by region.
 
-The component and platforms in this repository are not meant to be used by a
-user, but as a "blueprint" that custom component developers can build
-upon, to make more awesome stuff.
+# INSTALLATION
+Copy `custom_components/aemo_data_nem_forecasts/` to you local `custom_components/` directory or installd via [HACS](#).
 
-HAVE FUN! 😎
+# USAGE
+**With apexcharts:** Add this to configuration.yaml (install apexcharts via HACS first) then restart:
 
-## Why?
+```
+resources:
+  - url: /hacsfiles/apexcharts-card/apexcharts-card.js
+    type: module
 
-This is simple, by having custom_components look (README + structure) the same
-it is easier for developers to help each other and for users to start using them.
-
-If you are a developer and you want to add things to this "blueprint" that you think more
-developers will have use for, please open a PR to add it :)
-
-## What?
-
-This repository contains multiple files, here is a overview:
-
-File | Purpose | Documentation
--- | -- | --
-`.devcontainer.json` | Used for development/testing with Visual Studio Code. | [Documentation](https://code.visualstudio.com/docs/remote/containers)
-`.github/ISSUE_TEMPLATE/*.yml` | Templates for the issue tracker | [Documentation](https://help.github.com/en/github/building-a-strong-community/configuring-issue-templates-for-your-repository)
-`custom_components/integration_blueprint/*` | Integration files, this is where everything happens. | [Documentation](https://developers.home-assistant.io/docs/creating_component_index)
-`CONTRIBUTING.md` | Guidelines on how to contribute. | [Documentation](https://help.github.com/en/github/building-a-strong-community/setting-guidelines-for-repository-contributors)
-`LICENSE` | The license file for the project. | [Documentation](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/licensing-a-repository)
-`README.md` | The file you are reading now, should contain info about the integration, installation and configuration instructions. | [Documentation](https://help.github.com/en/github/writing-on-github/basic-writing-and-formatting-syntax)
-`requirements.txt` | Python packages used for development/lint/testing this integration. | [Documentation](https://pip.pypa.io/en/stable/user_guide/#requirements-files)
-
-## How?
-
-1. Create a new repository in GitHub, using this repository as a template by clicking the "Use this template" button in the GitHub UI.
-1. Open your new repository in Visual Studio Code devcontainer (Preferably with the "`Dev Containers: Clone Repository in Named Container Volume...`" option).
-1. Rename all instances of the `integration_blueprint` to `custom_components/<your_integration_domain>` (e.g. `custom_components/awesome_integration`).
-1. Rename all instances of the `Integration Blueprint` to `<Your Integration Name>` (e.g. `Awesome Integration`).
-1. Run the `scripts/develop` to start HA and test out your new integration.
-
-## Next steps
-
-These are some next steps you may want to look into:
-- Add tests to your integration, [`pytest-homeassistant-custom-component`](https://github.com/MatthewFlamm/pytest-homeassistant-custom-component) can help you get started.
-- Add brand images (logo/icon) to https://github.com/home-assistant/brands.
-- Create your first release.
-- Share your integration on the [Home Assistant Forum](https://community.home-assistant.io/).
-- Submit your integration to [HACS](https://hacs.xyz/docs/publish/start).
+type: custom:apexcharts-card
+header:
+  title: "NSW1 RRP"
+graph_span: 24h
+span:
+  start: day
+series:
+  - entity: sensor.nsw1_rrp_actual
+    name: "RRP Actual"
+    type: line
+    show:
+      datalabels: false
+    data_generator: >
+      return entity.attributes.series.map(a => {
+        return { x: new Date(a[0]), y: a[1] };
+      });
+  - entity: sensor.nsw1_rrp_forecast
+    name: "RRP Forecast"
+    type: line
+    show:
+      datalabels: false
+    data_generator: >
+      return entity.attributes.series.map(a => {
+        return { x: new Date(a[0]), y: a[1] };
+      });
+```
