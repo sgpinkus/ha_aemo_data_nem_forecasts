@@ -44,7 +44,7 @@ class RegionSensor(CoordinatorEntity, SensorEntity):
         )
 
     def _series(self):
-        if self.coordinator.data["5MIN"]:
+        if self.coordinator.data and self.coordinator.data["5MIN"]:
             return [
                 [r["SETTLEMENTDATE"], r[self._metric]]
                 for r in self.coordinator.data["5MIN"]
