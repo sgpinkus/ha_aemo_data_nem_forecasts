@@ -4,7 +4,6 @@ from homeassistant.components.sensor import SensorEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.device_registry import DeviceInfo
-from homeassistant.components.sensor import SensorStateClass
 
 from .const import DOMAIN, METRICS, REGIONS, PERIODS
 
@@ -19,6 +18,8 @@ async def async_setup_entry(
             for region in REGIONS:
                 entities.append(RegionSensor(coordinator, period, metric, region))
     async_add_entities(entities)
+    for entity in entities:
+        entity._handle_coordinator_update()
 
 
 class RegionSensor(CoordinatorEntity, SensorEntity):

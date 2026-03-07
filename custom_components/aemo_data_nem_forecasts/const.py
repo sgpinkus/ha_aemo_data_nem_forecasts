@@ -3,6 +3,7 @@ from logging import Logger, getLogger
 from homeassistant.const import (
     CURRENCY_DOLLAR,
     UnitOfEnergy,
+    UnitOfPower,
 )
 from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
 
@@ -10,7 +11,7 @@ MetricNameType = Literal["RRP", "TOTALDEMAND", "NETINTERCHANGE", "SCHEDULEDGENER
 
 LOGGER: Logger = getLogger(__package__)
 DOMAIN = "aemo_data_nem_forecasts"
-ATTRIBUTION = "Data provided by http://jsonplaceholder.typicode.com/"
+ATTRIBUTION = "Data provided by https://www.aemo.com.au/"
 METRICS: dict[MetricNameType, dict[str, Any]] = {
     "RRP": {
         "unit": f"{CURRENCY_DOLLAR}/{UnitOfEnergy.MEGA_WATT_HOUR}",
@@ -19,25 +20,25 @@ METRICS: dict[MetricNameType, dict[str, Any]] = {
         "display_precision": 2,
     },
     "TOTALDEMAND": {
-        "unit": UnitOfEnergy.MEGA_WATT_HOUR,
+        "unit": UnitOfPower.MEGA_WATT,
         "device_class": SensorDeviceClass.POWER,
         "state_class": SensorStateClass.MEASUREMENT,
         "display_precision": 3,
     },
     "NETINTERCHANGE": {
-        "unit": UnitOfEnergy.MEGA_WATT_HOUR,
+        "unit": UnitOfPower.MEGA_WATT,
         "device_class": SensorDeviceClass.POWER,
         "state_class": SensorStateClass.MEASUREMENT,
         "display_precision": 3,
     },
     "SCHEDULEDGENERATION": {
-        "unit": UnitOfEnergy.MEGA_WATT_HOUR,
+        "unit": UnitOfPower.MEGA_WATT,
         "device_class": SensorDeviceClass.POWER,
         "state_class": SensorStateClass.MEASUREMENT,
         "display_precision": 3,
     },
     "SEMISCHEDULEDGENERATION": {
-        "unit": UnitOfEnergy.MEGA_WATT_HOUR,
+        "unit": UnitOfPower.MEGA_WATT,
         "device_class": SensorDeviceClass.POWER,
         "state_class": SensorStateClass.MEASUREMENT,
         "display_precision": 3,

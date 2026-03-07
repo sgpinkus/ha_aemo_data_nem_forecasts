@@ -20,7 +20,8 @@ The AEMO API endpoint data is like:
 
   - PERIODTYPE ::= ("ACTUAL" | "FORECAST")
   - [APCFLAG](https://visualisations.aemo.com.au/aemo/nemweb/mmsdatamodelreport/electricity/mms%20data%20model%20report_files/MMS_130.htm)
-  - Forecast is in 30m intervals and from now until 04:00 the next day. A settlement time of 2026-03-07T04:00:00 means the time period [03:30, 04:00]
+  - Forecast is in 30m intervals and from now until at least 04:00 the next day.
+  - A settlement time of 2026-03-07T04:00:00 means the time period [03:30, 04:00]
 
 One sensor is created for each of REGION x PERIODTYPE x METRIC giving 5x2x6=60 possible entities grouped into device by region.
 

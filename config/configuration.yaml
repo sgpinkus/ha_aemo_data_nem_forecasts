@@ -15,14 +15,15 @@ resources:
   - url: /hacsfiles/apexcharts-card/apexcharts-card.js
     type: module
 
+# https://github.com/RomRider/apexcharts-card
 type: custom:apexcharts-card
 header:
-  title: "NSW1 RRP"
+  title: "VIC RRP"
 graph_span: 24h
 span:
   start: day
 series:
-  - entity: sensor.nsw1_rrp_actual
+  - entity: sensor.actual_rrp_vic1
     name: "RRP Actual"
     type: line
     show:
@@ -31,7 +32,7 @@ series:
       return entity.attributes.series.map(a => {
         return { x: new Date(a[0]), y: a[1] };
       });
-  - entity: sensor.nsw1_rrp_forecast
+  - entity: sensor.forecast_rrp_vic1
     name: "RRP Forecast"
     type: line
     show:
