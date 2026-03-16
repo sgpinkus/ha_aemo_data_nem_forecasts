@@ -30,7 +30,7 @@ class AemoCoordinator(DataUpdateCoordinator):
             hass,
             logger=LOGGER,
             name="aemo_5min",
-            update_interval=timedelta(seconds=180),
+            update_interval=timedelta(seconds=600), # The forecast is 30m ahead.
             always_update=False, # If data is __eq__ dont fire update event on listening entities.
         )
         self.session: ClientSession = async_get_clientsession(hass)

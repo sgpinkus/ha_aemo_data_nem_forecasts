@@ -33,36 +33,35 @@ Each sensor also stashes a "series" field in extra attributes which is the *enti
 Copy `custom_components/aemo_data_nem_forecasts/` to you local `custom_components/` directory or install via [HACS](#) then restart.
 
 # USAGE
-**With apexcharts:** Add this to configuration.yaml (install apexcharts via HACS first) then restart:
+**With apexcharts:** Add this apexcharts card:
 
 ```
-resources:
-  - url: /hacsfiles/apexcharts-card/apexcharts-card.js
-    type: module
-
 type: custom:apexcharts-card
 header:
-  title: "NSW1 RRP"
-graph_span: 24h
-span:
-  start: day
+  title: NSW1 RRP
+apex_config:
+  xaxis:
+    type: datetime
+    min: auto
+    max: auto
+    tickAmount: 12
+now:
+  show: true
+  label: now
+  color: var(--primary-color)
 series:
-  - entity: sensor.nsw1_rrp_actual
-    name: "RRP Actual"
+  - entity: sensor.actual_rrp_vic1
+    name: RRP Actual
     type: line
     show:
       datalabels: false
-    data_generator: >
-      return entity.attributes.series.map(a => {
-        return { x: new Date(a[0]), y: a[1] };
-      });
-  - entity: sensor.nsw1_rrp_forecast
-    name: "RRP Forecast"
+    data_generator: |
+      return entity.attributes.series.map(a => ({ x: new Date(a[0]), y: a[1] })).slice(-48);
+  - entity: sensor.forecast_rrp_vic1
+    name: RRP Forecast
     type: line
     show:
       datalabels: false
-    data_generator: >
-      return entity.attributes.series.map(a => {
-        return { x: new Date(a[0]), y: a[1] };
-      });
+    data_generator: |
+      return entity.attributes.series.map(a => ({ x: new Date(a[0]), y: a[1] }));
 ```
