@@ -14,11 +14,8 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                "charliermarsh.ruff",
-                "github.vscode-pull-request-github",
                 "ms-python.python",
                 "ms-python.vscode-pylance",
-                "ryanluker.vscode-coverage-gutters"
             ],
             "settings": {
                 "files.eol": "\n",
@@ -29,7 +26,6 @@
                 "files.trimTrailingWhitespace": true,
                 "python.analysis.typeCheckingMode": "basic",
                 "python.analysis.autoImportCompletions": true,
-                "python.defaultInterpreterPath": "/usr/local/bin/python"
             }
         }
     },

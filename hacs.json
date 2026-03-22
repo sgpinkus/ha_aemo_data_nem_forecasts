@@ -1,5 +1,6 @@
 {
-    "name": "AEMO Data",
-    "homeassistant": "2026.2.3",
-    "hacs": "2.0.5"
+  "name": "AEMO Data NEM Forecasts",
+  "homeassistant": "2026.2.3",
+  "hacs": "2.0.5",
+  "content_in_root": false
 }

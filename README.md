@@ -30,7 +30,7 @@ The scalar value of each sensor is the most current value (the first forecast va
 Each sensor also stashes a "series" field in extra attributes which is the *entire* latest time series for the given metric (!).
 
 # INSTALLATION
-Copy `custom_components/aemo_data_nem_forecasts/` to you local `custom_components/` directory or install via [HACS](#) then restart.
+Copy `custom_components/aemo_data_nem_forecasts/` to you local `custom_components/` directory or install via [HACS](https://hacs.xyz/docs/faq/custom_repositories/) then restart.
 
 # USAGE
 **With apexcharts:** Add this apexcharts card:
