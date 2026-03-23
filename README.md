@@ -27,7 +27,9 @@ One sensor is created for each of REGION x PERIODTYPE x METRIC giving 5x2x6=60 p
 
 The scalar value of each sensor is the most current value (the first forecast value or latest actual value).
 
-Each sensor also stashes a "series" field in extra attributes which is the *entire* latest time series for the given metric (!).
+Each sensor also stashes a "series" field in extra attributes which is the *entire* latest time series for the given metric.
+
+Technical note: For FORECAST type metrics we let the sensor attributes get persisted by the history recorder as per usual. For ACTUAL type metrics we by-pass the recorder and just stash one time series, updating it when new data is available (it's still accessed via extra attributes).
 
 # INSTALLATION
 Copy `custom_components/aemo_data_nem_forecasts/` to you local `custom_components/` directory or install via [HACS](https://hacs.xyz/docs/faq/custom_repositories/) then restart.
